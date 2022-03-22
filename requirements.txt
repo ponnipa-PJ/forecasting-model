@@ -1,0 +1,14 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: osx-64
+Flask==1.1.2
+itsdangerous==2.0.1
+Flask-Cors==3.0.10
+pandas==1.2.3
+matplotlib
+numpy
+gunicorn
+werkzeug
+keras
+sklearn
+
