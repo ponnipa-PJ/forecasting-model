@@ -1,11 +1,11 @@
 # forecasting-model
 
-## pip install -r requirements.txt
+#### pip install -r requirements.txt
 
-## run python main.py
+#### run python main.py
 
-## open index.html file
+#### open index.html file
 
-## choose csv file --> pre-processing
+#### choose csv file --> pre-processing
 
-## select model and forecasting
+#### select model and forecasting
