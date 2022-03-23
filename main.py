@@ -14,8 +14,9 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 from keras.layers import Dropout
+from sklearn.metrics import mean_squared_error
 import time
-from werkzeug.utils import secure_filename
+import math
 
 app = Flask(__name__)
 
@@ -82,6 +83,11 @@ def home():
             test_features = np.reshape(test_features, (test_features.shape[0], test_features.shape[1], 1))
             predictions = model.predict(test_features)
             predictions = scaler.inverse_transform(predictions)
+            
+            score = model.evaluate(features_set, labels, batch_size=32, verbose=0)
+            MSE = score
+            RMSE = math.sqrt(MSE)
+            
             plt.figure(figsize=(17,6))
             plt.plot(apple_testing_processed, color='blue', label='Actual Price')
             plt.plot(predictions , color='red', label='Predicted Price')
@@ -92,7 +98,7 @@ def home():
             new_arma_plot = "lstm_plot_" + str(time.time()) + ".png"
             plt.savefig('static/' + new_arma_plot)
                 
-            return render_template('index.html', forecast='LSTM', fcast='static/' + new_arma_plot)
+            return render_template('index.html', forecast='LSTM', rmse=RMSE, mse=MSE, fcast='static/' + new_arma_plot)
 
             # Forecasting using saved ARIMA model
         elif method =="arima":
