@@ -36,7 +36,13 @@ def home():
     if request.method == 'POST':
         
         method = request.form['forecast']
-            
+        
+        epoch = request.form['epochs']
+        
+        epoch = int(epoch)
+        
+        if epoch == '':
+            epoch =int(20)
             # Forecasting using saved ARMA model
         if method == "lstm":
             # target = os.path.join(app_root, 'static/')
@@ -68,7 +74,7 @@ def home():
             model.add(Dropout(0.2))
             model.add(Dense(units = 1))
             model.compile(optimizer = 'adam', loss = 'mean_squared_error')
-            model.fit(features_set, labels, epochs = 20, batch_size = 32, verbose=0)
+            model.fit(features_set, labels, epochs = epoch, batch_size = 32, verbose=0)
                 
             apple_testing_complete = pd.read_csv(name)
             apple_testing_processed = apple_testing_complete.iloc[:,2:3].values
@@ -84,6 +90,9 @@ def home():
             predictions = model.predict(test_features)
             predictions = scaler.inverse_transform(predictions)
             
+            trainresult =  model.predict(predictions)
+            trainresult = trainresult.flatten()
+            trainresult = trainresult.tolist()
             score = model.evaluate(features_set, labels, batch_size=32, verbose=0)
             MSE = score
             RMSE = math.sqrt(MSE)
@@ -98,7 +107,7 @@ def home():
             new_arma_plot = "lstm_plot_" + str(time.time()) + ".png"
             plt.savefig('static/' + new_arma_plot)
                 
-            return render_template('index.html', forecast='LSTM', rmse=RMSE, mse=MSE, fcast='static/' + new_arma_plot)
+            return render_template('index.html', forecast='LSTM', rmse=RMSE, mse=MSE, predict=trainresult, fcast='static/' + new_arma_plot)
 
             # Forecasting using saved ARIMA model
         elif method =="arima":

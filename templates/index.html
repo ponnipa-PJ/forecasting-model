@@ -1,50 +1,78 @@
 <!DOCTYPE html>
-<html >
+<html>
+
 <head>
   <meta charset="UTF-8">
   <title>ML API</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script>
-        $(function(){
-            var dynamicVar = '{% if forecast %}{{ forecast }}{% else%}base{% endif %}';
-            $("#forecast").val(dynamicVar).attr("selected", "selected");
-        });
+    $(function () {
+      var dynamicVar = '{% if forecast %}{{ forecast }}{% else%}base{% endif %}';
+      $("#forecast").val(dynamicVar).attr("selected", "selected");
+    });
   </script>
+  <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 
 <body>
- <div class="login">
-	<h1>Time series forecasting</h1>
-  <!-- <form action="upload.php" method="post" enctype="multipart/form-data">
+  <div class="login">
+    <h1>Time series forecasting</h1>
+    <!-- <form action="upload.php" method="post" enctype="multipart/form-data">
     เลือกไฟล์
      <input type="file" name="afile" id="fileToUpload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
      <input type="submit" value="Pre-processing" name="submit">
    </form> -->
-  <form action="/result" method="post">
-        <dl>
-            <dd>Choose model:
-                    <select name="forecast" id="forecast" selected="selected">
-                        <option value="base">Please select model</option>
-                        <option value="lstm">LSTM</option>
-                        <!-- <option value="arima">ARIMA</option>
+    <form action="/result" method="post">
+      <dl>
+        <dd>Choose model:
+          <select name="forecast" id="forecast" selected="selected">
+            <option value="base">Please select model</option>
+            <option value="lstm">LSTM</option>
+            <!-- <option value="arima">ARIMA</option>
                         <option value="exp">Exponential Smoothing</option>
                         <option value="prophet">Prophet</option>
                         <option value="auto_arima">Auto ARIMA</option> -->
-                    </select>
-            </dd><br>
-            <dd><input type=submit value="Show forecast"></dd>
-        </dl>
-  </form>
- </div>
- {% if fcast %}
-        <h3 align="center">Forecasting using {{ forecast }} </h3>
-        <div class="container">
-            <!-- {{ fcast|safe }} -->
-            <img src={{fcast|safe}} alt="Chart" width="auto" height="20%">
-            
-        <h3 align="center">MSE : {{ mse }} </h3>
-        <h3 align="center">RMSE : {{ rmse }} </h3>
-        </div>
-    {% endif %}
+          </select>
+        </dd><br>
+        <dd>Choose epoch:
+          <select name="epochs" id="epochs" selected="selected">
+            <option value="base">Please select epoch</option>
+            <option value="20">20 epoch</option>
+            <option value="50">50 epoch</option>
+            <option value="100">100 epoch</option>
+          </select>
+        </dd><br>
+        <dd><input type=submit value="Show forecast"></dd><br />
+      </dl>
+    </form>
+  </div>
+  {% if fcast %}
+  <h3 align="center">Forecasting using {{ forecast }} </h3>
+  <div class="container">
+    <!-- {{ fcast|safe }} -->
+    <img src={{fcast|safe}} alt="Chart" width="auto" height="20%">
+
+    <h3 align="center">MSE : {{ mse }} </h3>
+    <h3 align="center">RMSE : {{ rmse }} </h3>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">predict</th>
+        </tr>
+      </thead>
+      <tbody>
+        Data count is {{ predict|length }}
+        {%for item in predict %}
+        <tr>
+          <td>{{item}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+  </div>
+  {% endif %}
 </body>
+
 </html>
