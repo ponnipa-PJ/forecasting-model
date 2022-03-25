@@ -40,6 +40,7 @@ def home():
         epoch = request.form['epochs']
         
         epoch = int(epoch)
+        print(epoch)
         
         if epoch == '':
             epoch =int(20)
@@ -97,7 +98,7 @@ def home():
             MSE = score
             RMSE = math.sqrt(MSE)
             
-            plt.figure(figsize=(17,6))
+            plt.figure(figsize=(12,6))
             plt.plot(apple_testing_processed, color='blue', label='Actual Price')
             plt.plot(predictions , color='red', label='Predicted Price')
             plt.title('Price Prediction')
